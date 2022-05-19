@@ -1,5 +1,21 @@
 import { subscribe, unsubscribe } from './resources/API';
+import { useEffect, useState } from 'react';
 
 export function Effects(props: { sourceId: string }) {
-    return <div>123</div>;
+    const [info, setInfo] = useState(-1);
+    useEffect(() => {
+        setInfo(-1);
+        subscribe(props.sourceId, changeInfo);
+        return () => {
+            unsubscribe(props.sourceId, changeInfo);
+        };
+    }, [props.sourceId]);
+    function changeInfo(message: number) {
+        setInfo(message);
+    }
+    return (
+        <div>
+            {props.sourceId}: {info}
+        </div>
+    );
 }
